@@ -1,0 +1,25 @@
+{
+  "family": "thegoats-server",
+  "containerDefinitions": [
+    {
+      "image": "447477805491.dkr.ecr.ap-southeast-1.amazonaws.com/thegoats-server:latest",
+      "name": "thegoats-server",
+      "memory": 400,
+      "memoryReservation": 350,
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 0,
+          "protocol": "tcp",
+          "containerPort": 5000
+        }
+      ],
+      "environment": [
+        {
+          "name": "APPLICATION_NAME",
+          "value": "thegoats-server"
+        }
+      ]
+    }
+  ]
+}

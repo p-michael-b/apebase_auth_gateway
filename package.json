@@ -1,0 +1,29 @@
+{
+  "name": "goats_server",
+  "version": "1.0.0",
+  "description": "The GOATs backend, express app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Michael Bergmann",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "bcrypt": "^5.1.0",
+    "connect-session-knex": "^3.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "helmet": "^6.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "knex": "^2.3.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.22",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.10.0"
+  }
+}

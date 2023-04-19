@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
 
 //middleware for protecting the routes
 function isAuthenticated(req, res, next) {

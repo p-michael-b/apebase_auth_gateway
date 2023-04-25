@@ -25,18 +25,17 @@ function isAuthenticated(req, res, next) {
 
 //Login endpoint for acquiring authentication. Sets JWT token to authenticate with microservices
 router.post('/login', async (req, res, next) => {
-    passport.authenticate('local', async (error, authenticated_user, info) => {
+    passport.authenticate('local', async (error, authenticated_user) => {
         if (!authenticated_user) {
             return res.status(400).json({
                 success: false,
-                message: 'A user with this password does not exist',
+                message: 'You shall not pass!',
             });
         }
         req.login(authenticated_user, async (error) => {
             if (error) return next(error)
 
-            const token = jwt.sign({userId: authenticated_user.id}, process.env.JWT_SECRET, {expiresIn: '1h'});
-            req.session.token = token;
+            req.session.token = jwt.sign({userId: authenticated_user.id}, process.env.JWT_SECRET, {expiresIn: '1h'});
 
             return res.status(200).json({
                 success: true,

@@ -38,4 +38,31 @@ router.post('/mail_service', isAuthenticated, (req, res) => {
         });
 });
 
+//Database Service
+router.post('/init_table', isAuthenticated, (req, res) => {
+    console.log('ping')
+    const {table} = req.body;
+    const api_url = 'http://localhost:5003/init_table';
+    fetch(api_url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${req.session.token}` // pass token to mail service
+        },
+        body: JSON.stringify({mail_recipient, mail_subject, mail_text})
+    })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            console.log(data.message)
+            res.status(200).send(data.message);
+        })
+        .catch(error => {
+            console.error('error', error);
+            res.status(500).send('Error sending email');
+        });
+});
+
+
 module.exports = router;

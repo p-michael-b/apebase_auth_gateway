@@ -19,7 +19,7 @@ const knex = require('knex')({
 });
 
 module.exports = new LocalStrategy({usernameField: 'email', passwordField: 'password'}, async (email, password, done) => {
-    knex.select('_id', 'email', 'password')
+    knex.select('_id', 'email', 'password', 'operator')
         .from('auth.users')
         .where({email: email})
         .first()
@@ -37,7 +37,7 @@ module.exports = new LocalStrategy({usernameField: 'email', passwordField: 'pass
                 return done(null, database_user, 'Successfully authenticated');
             });
         })
-        .catch((err) => {
+        .catch((error) => {
             return done(error, null, 'knex error');
         });
 });

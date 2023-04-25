@@ -5,8 +5,6 @@ const helmet = require('helmet');
 const passport = require('passport');
 const session = require('express-session');
 const knex_session_store = require('connect-session-knex')(session);
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
 const morgan = require('morgan');
 
 const PORT = process.env.SERVER_PORT || 5001;
@@ -14,12 +12,23 @@ const app = express();
 const server = require('http').Server(app);
 const oneDay = 1000 * 60 * 60 * 24;
 
-
 // For minimal request body parsing
 app.use(express.json());
 
 // Cors for different origin communication, insecure for development
-app.use(cors({credentials: true, origin: true}))
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
+}));
+
+function waitMiddleware(req, res, next) {
+    setTimeout(() => {
+        next();
+    }, 5000); // 3 seconds
+}
+
+app.use(waitMiddleware);
 
 // Helmet for security
 app.use(helmet());
@@ -58,7 +67,6 @@ app.use(session({
 
 // Passport for authentication
 const localStrategy = require('./localStrategy.js');
-
 passport.use(localStrategy);
 app.use(passport.initialize());
 app.use(passport.session());
@@ -80,13 +88,6 @@ app.use((req, res, next) => {
     next();
 });
 
-//after passport can use routes
-const authRoutes = require('./routes/auth');
-const gatewayRoutes = require('./routes/gateway');
-
-app.use('/auth', authRoutes);
-app.use('/gate', gatewayRoutes);
-
 // Morgan for logging
 app.use(morgan('\n********** AUTH SERVICE REQUEST **********\n' +
     'Date       :date[iso]\n' +
@@ -99,6 +100,12 @@ app.use(morgan('\n********** AUTH SERVICE REQUEST **********\n' +
     'User Agent :user-agent\n' +
     '********** END REQUEST **********\n\n'));
 
+//after passport can use routes
+const authRoutes = require('./routes/auth');
+const gatewayRoutes = require('./routes/gateway');
+
+app.use('/auth', authRoutes);
+app.use('/gate', gatewayRoutes);
 
 app.get('/', (req, res) => {
     return res.json({
